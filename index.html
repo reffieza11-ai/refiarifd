@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Kendaraan - JavaScript OOP</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #333;
+        }
+
+        header {
+            background: #00bcd4;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+        }
+
+        header p {
+            margin: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #0097a7;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #00bcd4;
+        }
+
+        button {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            background: #00bcd4;
+            margin-right: 5px;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #0097a7;
+        }
+
+        .btn-hapus {
+            background: #f44336;
+        }
+
+        .btn-hapus:hover {
+            background: #d32f2f;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #00bcd4;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .kosong {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+
+        .info {
+            background: #e0f7fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Sistem Manajemen Kendaraan</h1>
+        <p>Implementasi Pemrograman Berorientasi Objek JavaScript</p>
+    </header>
+
+    <div class="container">
+
+        <!-- Form Tambah Kendaraan -->
+        <div class="card">
+            <h2>Tambah Kendaraan</h2>
+
+            <div class="info">
+                Silakan isi data kendaraan yang ingin ditambahkan.
+            </div>
+
+            <form id="formKendaraan">
+
+                <div class="form-group">
+                    <label for="nama">Nama Kendaraan</label>
+                    <input
+                        type="text"
+                        id="nama"
+                        placeholder="Contoh: Toyota Avanza"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="jenis">Jenis Kendaraan</label>
+                    <select id="jenis" required>
+                        <option value="">-- Pilih Jenis --</option>
+                        <option value="Mobil">Mobil</option>
+                        <option value="Motor">Motor</option>
+                        <option value="Truk">Truk</option>
+                        <option value="Bus">Bus</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tahun">Tahun</label>
+                    <input
+                        type="number"
+                        id="tahun"
+                        placeholder="Contoh: 2024"
+                        min="1900"
+                        max="2100"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="warna">Warna</label>
+                    <input
+                        type="text"
+                        id="warna"
+                        placeholder="Contoh: Hitam"
+                        required
+                    >
+                </div>
+
+                <button type="submit">+ Tambah Kendaraan</button>
+            </form>
+        </div>
+
+        <!-- Daftar Kendaraan -->
+        <div class="card">
+            <h2>Daftar Kendaraan</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Kendaraan</th>
+                        <th>Jenis</th>
+                        <th>Tahun</th>
+                        <th>Warna</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+
+                <tbody id="daftarKendaraan">
+                    <tr>
+                        <td colspan="6" class="kosong">
+                            Belum ada kendaraan.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+
+        // ==============================
+        // CLASS KENDARAAN
+        // ==============================
+
+        class Kendaraan {
+            constructor(nama, jenis, tahun, warna) {
+                this.nama = nama;
+                this.jenis = jenis;
+                this.tahun = tahun;
+                this.warna = warna;
+            }
+
+            infoKendaraan() {
+                return `${this.nama} - ${this.jenis} - ${this.tahun} - ${this.warna}`;
+            }
+        }
+
+
+        // ==============================
+        // CLASS MANAJEMEN KENDARAAN
+        // ==============================
+
+        class ManajemenKendaraan {
+
+            constructor() {
+                this.kendaraan = [];
+            }
+
+            tambah(kendaraan) {
+                this.kendaraan.push(kendaraan);
+            }
+
+            hapus(index) {
+                this.kendaraan.splice(index, 1);
+            }
+
+            tampilkan() {
+
+                const daftar = document.getElementById("daftarKendaraan");
+
+                daftar.innerHTML = "";
+
+                if (this.kendaraan.length === 0) {
+
+                    daftar.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="kosong">
+                                Belum ada kendaraan.
+                            </td>
+                        </tr>
+                    `;
+
+                    return;
+                }
+
+                this.kendaraan.forEach((kendaraan, index) => {
+
+                    const baris = document.createElement("tr");
+
+                    baris.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${kendaraan.nama}</td>
+                        <td>${kendaraan.jenis}</td>
+                        <td>${kendaraan.tahun}</td>
+                        <td>${kendaraan.warna}</td>
+                        <td>
+                            <button
+                                class="btn-hapus"
+                                onclick="hapusKendaraan(${index})">
+                                Hapus
+                            </button>
+                        </td>
+                    `;
+
+                    daftar.appendChild(baris);
+                });
+            }
+        }
+
+
+        // ==============================
+        // MEMBUAT OBJECT
+        // ==============================
+
+        const sistem = new ManajemenKendaraan();
+
+
+        // ==============================
+        // FORM TAMBAH KENDARAAN
+        // ==============================
+
+        document
+            .getElementById("formKendaraan")
+            .addEventListener("submit", function(event) {
+
+                event.preventDefault();
+
+                const nama = document.getElementById("nama").value;
+                const jenis = document.getElementById("jenis").value;
+                const tahun = document.getElementById("tahun").value;
+                const warna = document.getElementById("warna").value;
+
+                const kendaraanBaru = new Kendaraan(
+                    nama,
+                    jenis,
+                    tahun,
+                    warna
+                );
+
+                sistem.tambah(kendaraanBaru);
+
+                sistem.tampilkan();
+
+                document.getElementById("formKendaraan").reset();
+
+                alert("Kendaraan berhasil ditambahkan!");
+            });
+
+
+        // ==============================
+        // FUNGSI HAPUS
+        // ==============================
+
+        function hapusKendaraan(index) {
+
+            const yakin = confirm(
+                "Apakah kamu yakin ingin menghapus kendaraan ini?"
+            );
+
+            if (yakin) {
+
+                sistem.hapus(index);
+
+                sistem.tampilkan();
+
+            }
+        }
+
+    </script>
+
+</body>
+</html>
